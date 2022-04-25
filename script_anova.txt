@@ -1,0 +1,33 @@
+# Script - ANOVA
+
+# Importar dados 'algas.xlsx'
+algas
+
+# Boxplot
+boxplot(diversidade ~ grupo, data = algas)
+
+# ANOVA, método 1
+modelo = lm(diversidade ~ grupo, data = algas)
+anova(modelo)
+
+# ANOVA, método 2, pelo pacote ExpDes (MAIS FÁCIL)
+install.packages('ExpDes')
+library(ExpDes)
+
+crd(treat = algas$grupo, resp = algas$diversidade, mcomp = "lsd")
+
+# Gráfico de comparação de médias
+install.packages('agricolae')
+library(agricolae)
+medias = HSD.test(modelo, 'grupo', console = T)
+plot(medias)
+
+# Alternativa F-ANOVA 1-way
+# teste de Kruskal-Wallis (não paramétrico)
+
+# compara médias de ranks em vez de médias originais
+algas$diversidade
+rank(algas$diversidade)
+
+library(agricolae)
+kruskal(algas$diversidade, algas$grupo, console =TRUE)
